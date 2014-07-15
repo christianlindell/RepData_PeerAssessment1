@@ -5,7 +5,7 @@ date: "Saturday, July 12, 2014"
 output: html_document
 ---
 
-```{r, warning=FALSE, results='hide'}
+```{r, warning=FALSE, results='hide', message=FALSE}
 library(dplyr)
 library(ggplot2)
 library(reshape2)
@@ -105,7 +105,7 @@ The mean steps per day with missing values excluded is `r mean(stepDay$stepsPerD
   
 
 
-```{r}
+```{r, message=FALSE}
 ggplot(stepDay, aes(x=stepsPerDay)) + 
   geom_histogram() +
   ggtitle("Average number of steps per day") +
@@ -143,11 +143,11 @@ Compared to the original data, the imputed values rising the mean number of step
 
 The total number of steps per day on average is `r mean(stepDay$stepsPerDay)`. In the data with imputed values the average is `r mean(stepDayimp$stepsPerDay)`. The median value is `r median(stepDay$stepsPerDay)` and the corresponding median for the imputed values  is `r median(stepDayimp$stepsPerDay)`
 
-A total of `r missingIntervals` five minutes intervals are completly missing in the dataset and their values are not marked as NA. Because they are missing in the data evenly for all days, no messures has been made to impute values to these missing intervals.
+A total of `r missingIntervals` five minutes intervals are completly missing in the dataset and their values are not marked as NA. Because they are missing in the data  for every day in the studied period, no messures has been made to impute values to these missing intervals.
 
 
 
-```{r}
+```{r, message=FALSE}
 ggplot(stepDayimp, aes(x=stepsPerDay)) + 
   geom_histogram() +
   ggtitle("Average number of steps per day using imputed values") +
