@@ -122,7 +122,7 @@ ggplot(stepDay, aes(x=stepsPerDay)) +
 ggplot(stepInterval, aes(x=interval, y=stepsPerInt)) + 
   geom_line() +
   ggtitle("Average number of steps per 5 minutes interval") +
-  xlab("Minutes") +
+  xlab("Interval") +
   ylab("Number of steps")
 
 ```
@@ -169,7 +169,7 @@ ggplot(stepDaygrp, aes(x=interval, y=diffSteps)) +
   geom_line() +
   facet_wrap( ~ daygrp, ncol=1) +
   ggtitle("Average number of steps per five minutes interval in weekdays and weekends, \ndifference from the average number of steps for each interval for all days") +
-  xlab("Minutes") +
+  xlab("Interval") +
   ylab("Number of steps, differens from average")
 
 ```
