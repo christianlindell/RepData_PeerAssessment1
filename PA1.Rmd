@@ -79,12 +79,6 @@ for(i in 1:length(stepDaygrp$interval)) {
 }
 stepDaygrp$diffSteps <- stepDaygrp$stepsPerInt - stepDaygrp$avgStep
 
-# Some intervals seems to be missing in the original dataset. The are not coded
-# as NAs. They are not included in the dataset at all.
-x <- unique(data$interval)
-y <- seq(0, 2355, 5)
-missingIntervals <- setdiff(y, x)
-missingIntervals <- length(missingIntervals)
 
 totSteps <- data %>%
   select(daygrp, date, impstep) %>%
@@ -92,6 +86,21 @@ totSteps <- data %>%
   summarise(stepsPerDay = sum(impstep, na.rm=T)) %>%
   group_by(daygrp) %>%
   summarise(stepsPerDaygrp = mean(stepsPerDay, na.rm=T))
+
+totPeriods <- length(data$steps)
+totDays <-length(levels(data$date))
+startDate <- min(as.character(data$date))
+lastDate <- max(as.character(data$date))
+missingValues <- sum(is.na(data$steps))
+meanStepsPeriod <- mean(data$steps, na.rm = T)
+meanImpStepPeriod <- mean(data$impstep)
+medianImpStepPeriod <- median(data$impstep)
+meanStepsDay <- mean(stepDay$stepsPerDay)
+meanImpStepsDay <- mean(stepDayimp$stepsPerDay)
+medianStepsDay <- median(stepDay$stepsPerDay)
+medianImpStepsDay <- median(stepDayimp$stepsPerDay)
+totStepsDayWeekday <- totSteps[totSteps$daygrp=="weekday",2]
+totStepsDayWeekend <- totSteps[totSteps$daygrp=="weekend",2]
 
 ````
 
@@ -143,7 +152,6 @@ Compared to the original data, the imputed values rising the mean number of step
 
 The total number of steps per day on average is `r mean(stepDay$stepsPerDay)`. In the data with imputed values the average is `r mean(stepDayimp$stepsPerDay)`. The median value is `r median(stepDay$stepsPerDay)` and the corresponding median for the imputed values  is `r median(stepDayimp$stepsPerDay)`
 
-A total of `r missingIntervals` five minutes intervals are completly missing in the dataset and their values are not marked as NA. Because they are missing in the data  for every day in the studied period, no messures has been made to impute values to these missing intervals.
 
 
 

@@ -132,19 +132,28 @@ for(i in 1:length(stepDaygrp$interval)) {
 }
 stepDaygrp$diffSteps &lt;- stepDaygrp$stepsPerInt - stepDaygrp$avgStep
 
-# Some intervals seems to be missing in the original dataset. The are not coded
-# as NAs. They are not included in the dataset at all.
-x &lt;- unique(data$interval)
-y &lt;- seq(0, 2355, 5)
-missingIntervals &lt;- setdiff(y, x)
-missingIntervals &lt;- length(missingIntervals)
 
 totSteps &lt;- data %&gt;%
   select(daygrp, date, impstep) %&gt;%
   group_by(daygrp, date) %&gt;%
   summarise(stepsPerDay = sum(impstep, na.rm=T)) %&gt;%
   group_by(daygrp) %&gt;%
-  summarise(stepsPerDaygrp = mean(stepsPerDay, na.rm=T))</code></pre>
+  summarise(stepsPerDaygrp = mean(stepsPerDay, na.rm=T))
+
+totPeriods &lt;- length(data$steps)
+totDays &lt;-length(levels(data$date))
+startDate &lt;- min(as.character(data$date))
+lastDate &lt;- max(as.character(data$date))
+missingValues &lt;- sum(is.na(data$steps))
+meanStepsPeriod &lt;- mean(data$steps, na.rm = T)
+meanImpStepPeriod &lt;- mean(data$impstep)
+medianImpStepPeriod &lt;- median(data$impstep)
+meanStepsDay &lt;- mean(stepDay$stepsPerDay)
+meanImpStepsDay &lt;- mean(stepDayimp$stepsPerDay)
+medianStepsDay &lt;- median(stepDay$stepsPerDay)
+medianImpStepsDay &lt;- median(stepDayimp$stepsPerDay)
+totStepsDayWeekday &lt;- totSteps[totSteps$daygrp==&quot;weekday&quot;,2]
+totStepsDayWeekend &lt;- totSteps[totSteps$daygrp==&quot;weekend&quot;,2]</code></pre>
 <div id="the-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>The mean total number of steps taken per day</h2>
 <p>The mean steps per day with missing values excluded is 10766.1887 and the median is 10765.</p>
@@ -172,7 +181,6 @@ totSteps &lt;- data %&gt;%
 <p>The chosen strategy to handle NAs is to impute values by setting the missing values to the average of the same five minutes interval for the same day of the week in the whole dataset, f.x. if the first interval (0-5 minutes) for the first Monday contains a NA, then it is replaced with the average for the same interval for all Mondays in the data set.</p>
 <p>Compared to the original data, the imputed values rising the mean number of steps per interval slightly (from 37.3826 to 37.5736), but it doesn´t effect the median that is 0.</p>
 <p>The total number of steps per day on average is 10766.1887. In the data with imputed values the average is 10821.2096. The median value is 10765 and the corresponding median for the imputed values is 11015</p>
-<p>A total of 184 five minutes intervals are completly missing in the dataset and their values are not marked as NA. Because they are missing in the data for every day in the studied period, no messures has been made to impute values to these missing intervals.</p>
 <pre class="r"><code>ggplot(stepDayimp, aes(x=stepsPerDay)) + 
   geom_histogram() +
   ggtitle(&quot;Average number of steps per day using imputed values&quot;) +
