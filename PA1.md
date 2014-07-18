@@ -5,7 +5,8 @@ date: "Saturday, July 12, 2014"
 output: html_document
 ---
 
-```{r, warning=FALSE, results='hide'}
+
+```r
 library(dplyr)
 library(ggplot2)
 library(reshape2)
@@ -108,84 +109,99 @@ medianStepsDay <- median(stepDay$stepsPerDay)
 medianImpStepsDay <- median(stepDayimp$stepsPerDay)
 totStepsDayWeekday <- totSteps[totSteps$daygrp=="weekday",2]
 totStepsDayWeekend <- totSteps[totSteps$daygrp=="weekend",2]
-
-````
+```
 
 
 
 ## The mean total number of steps taken per day
 
 
-The mean steps per day with missing values excluded is `r mean(stepDay$stepsPerDay, na.rm=T)` and the median is `r median(stepDay$stepsPerDay, na.rm=T)`.
+The mean steps per day with missing values excluded is 10766.1887 and the median is 10765.
 
   
 
 
-```{r}
+
+```r
 ggplot(stepDay, aes(x=stepsPerDay)) + 
   geom_histogram() +
   ggtitle("Average number of steps per day") +
   xlab("Number of steps") +
   ylab("Number of days")
+```
 
 ```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
 ## The average daily activity pattern
 
 ``
 
-```{r}
+
+```r
 ggplot(stepInterval, aes(x=interval, y=stepsPerInt)) + 
   geom_line() +
   ggtitle("Average number of steps per 5 minutes interval") +
   xlab("Interval") +
   ylab("Number of steps")
-
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 
-The interval that produced the maximum number of steps across all days was `r maxSteps[1,1]` to `r maxSteps[1,1]+5` minutes, that on average produced `r maxSteps[1,2]` steps.
+
+The interval that produced the maximum number of steps across all days was 835 to 840 minutes, that on average produced 206.1698 steps.
 
 
 ## Imputing missing values
 
 
-There are a total of `r length(data$steps)` five minutes intervals in the data set,  covering the number of steps over a period of `r length(levels(data$date))` days (from `r min(as.character(data$date))` to `r max(as.character(data$date))`). Of these values a total of `r sum(is.na(data$steps))` contains missing values (coded as NAs). 
+There are a total of 17568 five minutes intervals in the data set,  covering the number of steps over a period of 61 days (from 2012-10-01 to 2012-11-30). Of these values a total of 2304 contains missing values (coded as NAs). 
 
 The chosen strategy to handle NAs is to impute values by setting the missing values to the average of the same five minutes interval for the same day of the week in the whole dataset, f.x. if the  first interval (0-5 minutes) for the first Monday contains a NA, then it is replaced with the average for the same interval for all Mondays in the data set.
 
-Compared to the original data, the imputed values rising the mean number of steps per interval slightly (from `r mean(data$steps, na.rm = T)` to `r mean(data$impstep)`), but it doesn´t effect the median that is `r median(data$impstep)`. 
+Compared to the original data, the imputed values rising the mean number of steps per interval slightly (from 37.3826 to 37.5736), but it doesn´t effect the median that is 0. 
 
-The total number of steps per day on average is `r mean(stepDay$stepsPerDay)`. In the data with imputed values the average is `r mean(stepDayimp$stepsPerDay)`. The median value is `r median(stepDay$stepsPerDay)` and the corresponding median for the imputed values  is `r median(stepDayimp$stepsPerDay)`
-
-
+The total number of steps per day on average is 10766.1887. In the data with imputed values the average is 10821.2096. The median value is 10765 and the corresponding median for the imputed values  is 11015
 
 
-```{r}
+
+
+
+```r
 ggplot(stepDayimp, aes(x=stepsPerDay)) + 
   geom_histogram() +
   ggtitle("Average number of steps per day using imputed values") +
   xlab("Number of steps") +
   ylab("Number of days")
+```
 
 ```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
+
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
 
 ## Differences in activity patterns between weekdays and weekends
 
 
-The number of steps per interval differs depending on if the day is a weekdays or a day in a weekend. As expected the activitys early in the morning are lower in the weekends but after that the number of steps per interval is mostly higher in the weekends. The average number of steps per day in the weekdays is `r totSteps[totSteps$daygrp=="weekday",2]` that can be compared with the average number of steps per day in the weekends, that is `r totSteps[totSteps$daygrp=="weekend",2]`.
+The number of steps per interval differs depending on if the day is a weekdays or a day in a weekend. As expected the activitys early in the morning are lower in the weekends but after that the number of steps per interval is mostly higher in the weekends. The average number of steps per day in the weekdays is 10257.5254 that can be compared with the average number of steps per day in the weekends, that is 12406.5714.
 
 
 
-```{r}
+
+```r
 ggplot(stepDaygrp, aes(x=interval, y=diffSteps)) + 
   geom_line() +
   facet_wrap(~daygrp, ncol=1) +
   ggtitle("Average number of steps per five minutes interval in weekdays and weekends, \ndifference from the average number of steps for each interval for all days") +
   xlab("Interval") +
   ylab("Number of steps, differens from average")
-
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
