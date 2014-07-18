@@ -10,7 +10,7 @@ library(dplyr)
 library(ggplot2)
 library(reshape2)
 library(knitr)
-kn# Avoid scientific notation
+# Avoid scientific notation
 options(scipen=999)
 
 # Load data
